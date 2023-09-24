@@ -2,35 +2,22 @@ function toArray(htmlCollection) {
 	return new Array(htmlCollection.length).fill(0).map((ignore, index) => htmlCollection[index]);
 }
 
-// chrome.storage.sync.get(["speed", "enabled"], function (result) {
-// 	console.log("NIGGGA NIGGA");
-// 	let videos = document.getElementsByTagName('video');
-
-// 	toArray(videos).map((video) => {
-// 		if (video) {
-// 			video.playbackRate = result.speed;
-// 			console.log(`Set speed to loaded default: ${result.speed}`);
-// 		}
-// 	});
-// });
-
 function adjustVideoSpeed(speed) {
+	// Just in case
+	speed = parseFloat(speed);
+
 	let videos = document.getElementsByTagName('video');
-	console.log("Adjusting video speed!");
+	console.log('Adjusting videos speed to: ' + speed);
 
 	toArray(videos).map((video) => {
-		if (video) {
-    		video.playbackRate = Number(speed);
-			console.log(`Set speed to: ${video.playbackRate}`, speed);
-      	}
+		if (video) { video.playbackRate = speed; }
     });
 }
 
 chrome.runtime.onMessage.addListener(function (message, sender, sendResponse) {
-	console.log(message);
-	if (message.action === "updateSettings") {
-		console.log(typeof message.enabled, typeof message.speed);
-		if (typeof message.enabled === "boolean" && typeof message.speed === "number") {
+	if (message.action === 'updateSettings') {
+		// Shit has to be parsed here because js is retarded asf and converts everything to strings
+		if (typeof message.enabled === 'boolean' && typeof parseFloat(message.speed) === 'number') {
 			if (message.enabled) {
 				adjustVideoSpeed(message.speed);
 			} else {

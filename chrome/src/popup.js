@@ -1,39 +1,75 @@
-document.addEventListener("DOMContentLoaded", function () {
-	const speedSlider = document.getElementById("speedSlider");
-	const speedValue = document.getElementById("speedValue");
-	const toggleExtension = document.getElementById("toggleExtension");
+document.addEventListener('DOMContentLoaded', function () {
+	function updateSpeedUI(newSpeed) {
+		newSpeed = parseFloat(newSpeed);
 
+		speedSlider.value = newSpeed;
+		speedValue.textContent = newSpeed.toFixed(2) + 'x';
+	}
+
+	function updateEnabledUI(newEnabled) {
+		toggleExtension.checked = newEnabled;
+		toggleExtensionLabel.textContent = newEnabled ? 'Enabled' : 'Disabled';
+	}
+
+	function sendSpeed(newSpeed) {
+		chrome.storage.sync.set({ speed: speed });
+		chrome.runtime.sendMessage({ action: 'updateSpeed', speed: newSpeed });
+	}
+
+	function sendEnabled(newEnabled) {
+		chrome.storage.sync.set({ enabled: enabled });
+		chrome.runtime.sendMessage({ action: 'toggleExtension', enabled: newEnabled });
+	}
+
+	const speedSlider = document.getElementById('speedSlider');
+	const speedValue = document.getElementById('speedValue');
+	const toggleExtension = document.getElementById('toggleExtension');
+	const toggleExtensionLabel = document.querySelector('label[for=\'toggleExtension\']');
+
+	let speed = 1.0;
 	let enabled = false;
 
-	  // Load the settings from storage and update the UI
-	chrome.storage.sync.get(["speed", "enabled"], function (result) {
+	chrome.storage.sync.get(['speed', 'enabled'], function (result) {
 		const savedSpeed = result.speed || 1.0;
 		const savedEnabled = result.enabled || false;
 
-		speedSlider.value = savedSpeed;
-		speedValue.textContent = savedSpeed.toFixed(2) + "x";
-		toggleExtension.checked = savedEnabled;
+		speed = parseFloat(savedSpeed);
+		enabled = savedEnabled;
 
-		// Apply the saved speed to the YouTube video (You'll need to communicate with a content script or background script here).
-  	});
+		updateSpeedUI(speed);
+		updateEnabledUI(enabled);
+
+		sendSpeed(speed);
+		sendEnabled(enabled);
+
+		console.log('Loaded speed: ' + speed + ' is enabled: ' + enabled);
+	});
 	
-  	speedSlider.addEventListener("mouseup", function () {
-		const speed = parseFloat(speedSlider.value).toFixed(2);
-		speedValue.textContent = speed + "x";
-		// You can send a message to a background script to update the YouTube video speed here.
-			
-		chrome.storage.sync.set({ speed: parseFloat(speed) });
-		chrome.runtime.sendMessage({ action: "updateSpeed", speed });
-			
-			console.log("Speed slider changed!");
+	// Only for updating the UI
+	speedSlider.addEventListener('input', function () {
+		const newSpeed = parseFloat(speedSlider.value).toFixed(2);
+
+		updateSpeedUI(newSpeed);
+	
+		console.log('Speed slider changed to: ' + speed);
   	});
 
-  	toggleExtension.addEventListener("change", function () {
-		// You can send a message to a background script to enable/disable the extension's logic here.
+  	speedSlider.addEventListener('mouseup', function () {
+		const newSpeed = parseFloat(speedSlider.value).toFixed(2);
+		speed = parseFloat(newSpeed)	
+
+		updateSpeedUI(speed);
+		sendSpeed(speed);
+			
+		console.log('Speed slider left at: ' + speed);
+  	});
+
+  	toggleExtension.addEventListener('change', function () {
 		enabled = toggleExtension.checked;
-		chrome.storage.sync.set({ enabled });
-		chrome.runtime.sendMessage({ action: "toggleExtension", enabled });
-		
-		console.log("Tick box changed!");
+			
+		updateEnabledUI(enabled);
+		sendEnabled(enabled);
+
+		console.log('Enabled tick box changed to: ' + enabled);
   	});
 });
