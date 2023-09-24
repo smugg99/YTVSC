@@ -3,7 +3,7 @@ document.addEventListener('DOMContentLoaded', function () {
 		newSpeed = parseFloat(newSpeed);
 
 		speedSlider.value = newSpeed;
-		speedValue.textContent = newSpeed.toFixed(2) + 'x';
+		speedValue.textContent = newSpeed.toFixed(1) + 'x';
 	}
 
 	function updateEnabledUI(newEnabled) {
