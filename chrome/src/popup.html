@@ -1,3 +1,5 @@
+<!-- <a href="https://www.flaticon.com/free-icons/cocaine" title="cocaine icons">Cocaine icons created by Freepik - Flaticon</a> -->
+
 <!-- popup.html -->
 <!DOCTYPE html>
 <html>
@@ -11,12 +13,19 @@
 </head>
 
 <body>
-	<h1>YouTube Speed Control</h1>
-	<label for="speedSlider">Speed: <span id="speedValue">1.0x</span></label>
-	<input type="range" id="speedSlider" min="0.25" max="8.0" step="0.2" value="1.0" />
-	<br />
-	<label for="toggleExtension">Enable/Disable:</label>
-	<input type="checkbox" id="toggleExtension" />
+	<h1>YouTube Speed
+		Control
+	</h1>
+
+	<div class="slider-container">
+		<input type="range" class="slider" min="0.2" max="8.0" step="0.2" value="1.0" id="speedSlider">
+		<output class="slider-value" id="speedValue">1.00x</output>
+	</div>
+
+	<div class="checkbox-container">
+		<label for="toggleExtension" class="checkbox-label">Enabled</label>
+		<input type="checkbox" class="checkbox" id="toggleExtension">
+	</div>
 </body>
 
 </html>

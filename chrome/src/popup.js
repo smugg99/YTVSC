@@ -12,13 +12,25 @@ document.addEventListener('DOMContentLoaded', function () {
 	}
 
 	function sendSpeed(newSpeed) {
-		chrome.storage.sync.set({ speed: speed });
-		chrome.runtime.sendMessage({ action: 'updateSpeed', speed: newSpeed });
+		chrome.storage.sync.set({
+			speed: speed
+		});
+
+		chrome.runtime.sendMessage({
+			action: 'updateSpeed',
+			speed: newSpeed
+		});
 	}
 
 	function sendEnabled(newEnabled) {
-		chrome.storage.sync.set({ enabled: enabled });
-		chrome.runtime.sendMessage({ action: 'toggleExtension', enabled: newEnabled });
+		chrome.storage.sync.set({
+			enabled: enabled
+		});
+
+		chrome.runtime.sendMessage({
+			action: 'toggleExtension',
+			enabled: newEnabled
+		});
 	}
 
 	const speedSlider = document.getElementById('speedSlider');
