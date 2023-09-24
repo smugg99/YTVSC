@@ -7,23 +7,25 @@ function updateContentScripts(_speed, _enabled) {
   	chrome.tabs.query({ active: true, currentWindow: true }, (tabs) => {
 		tabs.forEach((tab) => {
 			console.log("Sending updateSettings message!");
-			// chrome.tabs.sendMessage(tab.id, { action: "updateSettings", enabled: _enabled, speed: _speed });
-			
-			chrome.scripting.executeScript({
-				target: { tabId: tab.id },
-				files: ["src/content.js"]
-			});
+			console.log(_speed, _enabled);
+			chrome.tabs.sendMessage(tab.id, { action: "updateSettings", speed: _speed, enabled: _enabled });
+
+			// chrome.scripting.executeScript({
+			// 	target: { tabId: tab.id },
+			// 	files: ["src/content.js"]
+			// });
 		});
 	});
 }
 
 // Listen for messages from the popup script
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+	console.log(message.speed);
 	if (message.action === "toggleExtension") {
     	enabled = message.enabled;
-    	updateContentScripts();
+    	updateContentScripts(speed, enabled);
   	} else if (message.action === "updateSpeed") {
-    	speed = message.speed;
-    	updateContentScripts();
+		speed = Number(message.speed);
+    	updateContentScripts(speed, enabled);
   	}
 });

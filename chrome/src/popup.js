@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", function () {
 		// Apply the saved speed to the YouTube video (You'll need to communicate with a content script or background script here).
   	});
 	
-  	speedSlider.addEventListener("input", function () {
+  	speedSlider.addEventListener("mouseup", function () {
 		const speed = parseFloat(speedSlider.value).toFixed(2);
 		speedValue.textContent = speed + "x";
 		// You can send a message to a background script to update the YouTube video speed here.
