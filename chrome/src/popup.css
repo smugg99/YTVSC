@@ -1,0 +1,21 @@
+body {
+	width: 200px;
+	padding: 10px;
+	text-align: center;
+}
+
+h1 {
+	font-size: 18px;
+}
+
+input[type="range"] {
+	width: 100%;
+}
+
+label {
+	font-size: 14px;
+}
+
+#speedValue {
+	font-weight: bold;
+}
